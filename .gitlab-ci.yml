@@ -29,7 +29,8 @@ imagetest:
   #   name: production
   #   action: prepare
   tags:
-    - big-build
+    - k3s
+    # - big-build
   script:
     - ls -all
 
