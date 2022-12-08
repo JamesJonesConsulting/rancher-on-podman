@@ -5,11 +5,12 @@
 # variables:
 #   KUBE_CONTEXT: path/to/your-agent-configuration-project:your-agent-name
 
+variables:
+  DOCKER_AUTH_CONFIG: ${HOME_NEXUS_DOCKER_AUTH_CONFIG}
+
 .base:
   # See https://gitlab.com/gitlab-org/cluster-integration/cluster-applications/
   image: "$HOME_NEXUS_DOCKER_REGISTRY/jamesjonesconsulting/podman-dind-like:latest"
-  variables:
-    DOCKER_AUTH_CONFIG: ${HOME_NEXUS_DOCKER_AUTH_CONFIG}
 
   # before_script:
   #   - chmod 400 "$KUBECONFIG"   # Workaround for https://gitlab.com/gitlab-org/gitlab/-/issues/327912
