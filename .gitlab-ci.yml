@@ -10,8 +10,6 @@
   image: "$HOME_NEXUS_DOCKER_REGISTRY/jamesjonesconsulting/podman-dind-like:latest"
   variables:
     DOCKER_AUTH_CONFIG: ${HOME_NEXUS_DOCKER_AUTH_CONFIG}
-  tags:
-    - big-build
 
   # before_script:
   #   - chmod 400 "$KUBECONFIG"   # Workaround for https://gitlab.com/gitlab-org/gitlab/-/issues/327912
@@ -29,6 +27,8 @@ imagetest:
   # environment:
   #   name: production
   #   action: prepare
+  tags:
+    - big-build
   script:
     - ls -all
 
