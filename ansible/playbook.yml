@@ -2,7 +2,64 @@
   hosts: "{{ lookup('env','ALL_RANCHER_NODES',default='rancher') }}"
   vars_files:
     - ./vars/main.yml
-  tasks: []
+  tasks:
+    - name: Setup Podman socket permissions
+      ansible.builtin.include_role:
+        name: jamesjonesconsulting.podman_socket_group_permissions.permissions_setup
+      vars:
+        podman_user_group: docker
+        podman_users: []
+    - name: Setup CRI-O
+      ansible.builtin.include_role:
+        name: jamesjonesconsulting.podman_socket_group_permissions.setup_cri-o
+      # vars:
+      #   crio_search_registries:
+      #     - nexus.jamesjonesconsulting.com:5444
+    - name: Add additional CRI-O settings
+      ansible.builtin.copy:
+        content: |
+          [crio.runtime]
+          conmon_cgroup = "pod"
+          cgroup_manager = "cgroupfs"
+          registries = [
+            {%- for reg in crio_search_registries %}
+
+            "{{ reg }}"{{ "," if not loop.last }}
+
+            {%- endfor %}
+          ]
+        dest: /etc/crio/crio.conf.d/11-k3s.conf
+        mode: 0644
+        owner: root
+        group: root
+    - name: Add the br_netfilter module
+      community.general.modprobe:
+        name: "{{ mod }}"
+        state: present
+      loop:
+        - br_netfilter
+        - overlay
+      loop_control:
+        loop_var: mod
+    - name: Ensure modules are loaded on reboot
+      ansible.builtin.copy:
+        content: |
+          overlay
+          br_netfilter
+        dest: /etc/modules-load.d/crio.conf
+        owner: root
+        group: root
+        mode: 0644
+    - name: Setup unqualified search registries
+      ansible.builtin.copy:
+        content: |
+          unqualified-search-registries=[{% for reg in crio_search_registries %}"{{ reg }}"{{ "," if not loop.last }}{% endfor %}]
+        dest: /etc/containers/registries.conf
+        owner: root
+        group: root
+        mode: 0644
+
+
 #     - name: Read in the vault
 #       ansible.builtin.include_vars:
 #         file: "{{ kubernetes_vaulted_variables }}"

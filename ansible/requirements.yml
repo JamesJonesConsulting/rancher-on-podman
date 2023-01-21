@@ -1,8 +1,8 @@
 collections:
-collections:
   - name: https://github.com/JamesJonesConsulting/jamesjonesconsulting.gitlab_runner_on_podman.git
     type: git
-    version: main
+    version: develop
+    # version: main
   # - name: https://github.com/JamesJonesConsulting/jamesjonesconsulting.salt_agents.git
   #   type: git
   #   version: main
