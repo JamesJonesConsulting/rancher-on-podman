@@ -1,5 +1,5 @@
 collections:
-  - name: https://github.com/JamesJonesConsulting/jamesjonesconsulting.gitlab_runner_on_podman.git
+  - name: https://github.com/JamesJonesConsulting/jamesjonesconsulting.podman_socket_group_permissions.git
     type: git
     version: develop
     # version: main
