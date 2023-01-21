@@ -1,0 +1,33 @@
+- name: Presetup for Rancher nodes
+  hosts: "{{ lookup('env','ALL_RANCHER_NODES',default='rancher') }}"
+  vars_files:
+    - ./vars/main.yml
+  tasks: []
+#     - name: Read in the vault
+#       ansible.builtin.include_vars:
+#         file: "{{ kubernetes_vaulted_variables }}"
+#         name: kubernetes_vault
+#     - name: Setup Salt agents
+#       ansible.builtin.include_role:
+#         name: jamesjonesconsulting.salt_agents.agent_setup
+#       # vars:
+#       #   podman_user_group: docker
+#       #   podman_users:
+#       #     - "{{ ansible_user }}"
+
+# - name: Refresh Salt Inventory
+#   hosts: salt_master
+#   vars_files:
+#     - ./vars/main.yml
+#   tasks:
+#     - name: Setup Salt Master State Base Hosts
+#       ansible.builtin.include_role:
+#         name: jamesjonesconsulting.salt_agents.generate_hosts
+#       vars:
+#         generate_hosts_group: salt_minion
+#     - name: Run the highstate to enforce the configuration
+#       ansible.builtin.command: "salt 'control01.jamesjonesconsulting.com' state.highstate"
+#       # delegate_to: "{{ salt_master }}"
+#       # become: true
+#       when:
+#         - "(salt_agent | default('minion')) in ['master']"
